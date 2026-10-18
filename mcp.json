@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "cli-bridge": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp<2",
+        "python3",
+        "${CURSOR_PLUGIN_ROOT}/server/server.py"
+      ],
+      "env": {
+        "CLI_BRIDGE_CLAUDE_BIN": "${CLI_BRIDGE_CLAUDE_BIN}",
+        "CLI_BRIDGE_CODEX_BIN": "${CLI_BRIDGE_CODEX_BIN}",
+        "CLI_BRIDGE_CLAUDE_DEFAULT_MODEL": "${CLI_BRIDGE_CLAUDE_DEFAULT_MODEL}",
+        "CLI_BRIDGE_CODEX_DEFAULT_MODEL": "${CLI_BRIDGE_CODEX_DEFAULT_MODEL}",
+        "CLI_BRIDGE_WORKSPACE_ROOT": "${CLI_BRIDGE_WORKSPACE_ROOT}",
+        "CLI_BRIDGE_TIMEOUT_SECONDS": "${CLI_BRIDGE_TIMEOUT_SECONDS}",
+        "CLI_BRIDGE_OUTPUT_CAP_CHARS": "${CLI_BRIDGE_OUTPUT_CAP_CHARS}"
+      }
+    }
+  }
+}
