@@ -62,6 +62,12 @@
         "description": "Absolute path to the workspace folder the CLIs may run in. Empty = the folder the MCP host launched the server from.",
         "default": ""
       },
+      "CLI_BRIDGE_ALLOWED_ROOTS": {
+        "type": "string",
+        "title": "Additional allowed roots (optional)",
+        "description": "Optional os.pathsep-separated list of extra absolute folders the CLIs may run in, in addition to CLI_BRIDGE_WORKSPACE_ROOT. The cwd allowlist cannot be disabled; it can only be extended via CLI_BRIDGE_WORKSPACE_ROOT and this variable.",
+        "default": ""
+      },
       "CLI_BRIDGE_TIMEOUT_SECONDS": {
         "type": "string",
         "title": "Default timeout seconds",

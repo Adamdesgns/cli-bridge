@@ -30,7 +30,7 @@ your computer; it is *not* some other computer you can reach remotely):
    (Cursor / Grok Bot plugin support), with:
    - Python 3.11+ available, and
    - [`uv`](https://docs.astral.sh/uv/) on `PATH` (`uv --version` works). The bundled
-     server is launched as `uv run --with "mcp<2" python3 <plugin>/server/server.py`.
+     server is launched as `uv run --with "mcp==1.30.0" python3 <plugin>/server/server.py`.
 2. **Claude Code CLI** *(only if you want `claude_prompt`)* — install per
    https://code.claude.com/docs (for example `npm install -g @anthropic-ai/claude-code`),
    then run `claude` once interactively and log in.
@@ -56,7 +56,7 @@ terminal: `claude --version` and `codex --version`.
   plugin's install folder in `command`/`args`/`env`/`cwd`. **Host caveat:**
   if your host does *not* expand `${CURSOR_PLUGIN_ROOT}`, replace that arg
   with the absolute path to `server/server.py` in your local copy, e.g.
-  `uv run --with "mcp<2" python3 /path/to/cli-bridge/server/server.py`.
+  `uv run --with "mcp==1.30.0" python3 /path/to/cli-bridge/server/server.py`.
   Do not commit that machine-specific edit back to a shared repo.
 
 ## Configuration (optional)
@@ -73,6 +73,7 @@ and API keys must **never** be put here (the CLIs use their own logins).
 | `CLI_BRIDGE_CLAUDE_DEFAULT_MODEL` | `claude-opus-5-5` | Model used for Claude `model="default"` |
 | `CLI_BRIDGE_CODEX_DEFAULT_MODEL` | *(empty)* | Model for Codex `model="default"`; empty = Codex's own default |
 | `CLI_BRIDGE_WORKSPACE_ROOT` | *(launch folder)* | The one folder (tree) the CLIs are allowed to run in |
+| `CLI_BRIDGE_ALLOWED_ROOTS` | *(empty)* | Optional os.pathsep-separated extra allowed folders, in addition to the workspace root |
 | `CLI_BRIDGE_TIMEOUT_SECONDS` | `300` | Per-call timeout default (clamped 5–900) |
 | `CLI_BRIDGE_OUTPUT_CAP_CHARS` | `20000` | Max stdout/stderr chars returned per call |
 
@@ -103,8 +104,9 @@ and `codex_prompt(prompt, model, cwd, timeout, permission_mode)`.
 - **No shell:** the server executes CLIs via argument arrays (`shell=False`),
   validates model ids, caps output, and enforces timeouts. Prompt text is
   passed as a single argument, never interpreted by a shell.
-- **Escape hatch (unsafe):** `CLI_BRIDGE_ALLOW_ANY_CWD=1` disables the cwd
-  allowlist. Leave it unset unless you fully understand the risk.
+- **No disable switch:** the cwd allowlist cannot be disabled. It can only
+  be extended via the declared `CLI_BRIDGE_WORKSPACE_ROOT` /
+  `CLI_BRIDGE_ALLOWED_ROOTS` variables above.
 
 ## Troubleshooting
 
@@ -116,8 +118,8 @@ and `codex_prompt(prompt, model, cwd, timeout, permission_mode)`.
 - *cwd / allowed-root errors* — set `CLI_BRIDGE_WORKSPACE_ROOT` to your
   workspace folder (absolute path) in the plugin's configuration.
 - *Server won't start* — check `uv --version` and `python3 --version`
-  (3.11+) in a terminal; the first launch downloads the pinned `mcp<2`
-  package via `uv`, which needs network access once.
+  (3.11+) in a terminal; on first launch `uv` fetches the exact pinned
+  `mcp==1.30.0` package from PyPI, which needs network access once.
 
 ## Development / local validation (no model calls)
 
@@ -134,5 +136,4 @@ must return the clean "not found" error.
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE). (Publisher: confirm the copyright holder
-line before publishing; see `PUBLISHING.md`.)
+MIT — see [`LICENSE`](LICENSE) (`Copyright (c) 2026 Adamdesgns`).

@@ -27,6 +27,8 @@ for field in ("description",):
 author = (pj.get("author") or {}).get("name", "")
 if "TODO" in str(pj.get("author")) or "TODO" in str(pj.get("repository")):
     warn("plugin.json still has TODO author/repository placeholders (must fix before submission)")
+if not (pj.get("author") or {}).get("email"):
+    warn("plugin.json author.email is blank (OPEN: publisher must provide a contact email before marketplace submission; not required to merge this package)")
 if pj.get("mcpServers") != "./mcp.json":
     warn("plugin.json mcpServers should point at ./mcp.json")
 if pj.get("skills") != "./skills/":
@@ -43,8 +45,25 @@ try:
     joined = " ".join(srv.get("args", []))
     assert "${CURSOR_PLUGIN_ROOT}/server/server.py" in joined, "args must use ${CURSOR_PLUGIN_ROOT}/server/server.py"
     assert not re.search(r"/workspace|/home/|/Users/|[A-Za-z]:\\", joined), "absolute/user path in mcp args"
+    assert "mcp==1.30.0" in joined, "mcp must be exactly pinned as mcp==1.30.0"
+    assert "mcp<2" not in joined and "mcp>" not in joined, "range-pinned mcp spec is not allowed"
+    # every env var passed in mcp.json must be declared in plugin.json variables
+    declared = set(((pj.get("variables") or {}).get("properties") or {}).keys())
+    for k in (srv.get("env") or {}):
+        if k not in declared:
+            err(f"mcp.json env var {k} is not declared in plugin.json variables")
 except Exception as e:
     err(f"mcp.json problem: {e}")
+
+# cwd bypass must be absent; allowlist can only be extended via declared vars
+try:
+    srv_text = (ROOT / "server" / "server.py").read_text()
+    if "CLI_BRIDGE_ALLOW_ANY_CWD" in srv_text:
+        err("server.py must not contain CLI_BRIDGE_ALLOW_ANY_CWD (allowlist bypass)")
+    if "CLI_BRIDGE_ALLOWED_ROOTS" in srv_text and "CLI_BRIDGE_ALLOWED_ROOTS" not in ((pj.get("variables") or {}).get("properties") or {}):
+        err("CLI_BRIDGE_ALLOWED_ROOTS used in server.py but not declared in plugin.json variables")
+except Exception as e:
+    err(f"server bypass check problem: {e}")
 
 # referenced paths stay inside root, relative, no ..
 for key in ("skills", "mcpServers"):

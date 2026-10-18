@@ -131,7 +131,7 @@ found in the available tools or docs. **Do not assume submitting to Cursor
 automatically lists the plugin in any Grok Bot catalogue, or vice versa.**
 Whoever submits must first confirm (with the Grok Bot/Cursor team, or in the
 publish form itself) which catalogue `cursor.com/marketplace/publish` feeds
-and whether a separate Grok Bot listing step exists. This is Blocker B4 in §5.
+and whether a separate Grok Bot listing step exists. This is OPEN-3 in section 5.
 
 ### 1c. Real installed plugins inspected (structure only, no secrets read)
 
@@ -164,13 +164,13 @@ Repo-root layout (this `marketplace/` folder **is** the plugin root and
 should become the root of the submission repository — see §4 step 1):
 
 ```
-.cursor-plugin/plugin.json   manifest: name cli-bridge, v0.1.0, TODO author/repo placeholders
-mcp.json                     stdio MCP launch: uv run --with "mcp<2" python3 ${CURSOR_PLUGIN_ROOT}/server/server.py
+.cursor-plugin/plugin.json   manifest: name cli-bridge, v0.1.0, publisher Adamdesgns / repo decided 2026-10-17; contact email still OPEN (see section 5)
+mcp.json                     stdio MCP launch: uv run --with "mcp==1.30.0" python3 ${CURSOR_PLUGIN_ROOT}/server/server.py
 server/server.py             cli_probe + claude_prompt + codex_prompt (generic, no machine-specific paths)
 skills/cli-bridge/SKILL.md   when/how to use the tools, probe-first, spend-approval, permission ceilings
-assets/logo.svg              placeholder logo (replace or keep, see §5)
+assets/logo.svg              logo (publisher to approve or replace before submission)
 README.md                    prerequisites, config, privacy/security, troubleshooting
-LICENSE                      MIT text with <year> <copyright holders> placeholder
+LICENSE                      MIT text, Copyright (c) 2026 Adamdesgns
 CHANGELOG.md                 0.1.0 entry
 PUBLISHING.md                this file (may be kept in the repo; reviewers reading it is fine)
 smoke_test.py                host-simulating MCP test, no model calls
@@ -181,9 +181,9 @@ scripts/validate_package.py  static manifest/skill/no-secrets validation
 Deliberate design choices a reviewer (and the publisher) should know:
 
 - **No binaries shipped, no keys handled.** The server is a single stdlib +
-  `mcp<2` Python file launched via `uv`; Claude/Codex are the *user's own*
-  installs using their own logins. First launch needs network once so `uv`
-  can fetch the pinned `mcp<2` package.
+  `mcp==1.30.0` Python file launched via `uv`; Claude/Codex are the *user's
+  own* installs using their own logins. On first launch `uv` fetches the
+  exact pinned `mcp==1.30.0` package from PyPI (network needed once).
 - **Permission ceilings in code:** Claude `bypassPermissions` refused;
   Codex `danger-full-access` refused. Cwd allowlist, timeout/output caps,
   argv-only execution, validated model ids.
@@ -208,7 +208,7 @@ From the Publisher Terms + Marketplace security pages (read in full):
 3. **Permissive licenses only.** "You may only use open-source licenses that
    are classified as permissive (e.g., MIT, BSD, and Apache 2.0). Copyleft
    or restrictive licenses (e.g., GPL, AGPL, LGPL) may not be included."
-   → MIT (current placeholder) or Apache-2.0 both comply; GPL anything does not.
+   → MIT (decided 2026-10-17, see section 5) or Apache-2.0 both comply; GPL anything does not.
 4. **Manual review of everything.** Every plugin *and every update* is
    manually reviewed for security, data handling, and quality before
    listing; the marketplace is curated, approval is at Anysphere's sole
@@ -260,19 +260,23 @@ Cursor's discretion. Budget for rejection or silence.
      `.cursor-plugin/marketplace.json`:
      `{"name": "<your-marketplace>", "owner": {"name": "...", "email": "..."}, "plugins": [{"name": "cli-bridge", "source": "cli-bridge", "description": "..."}]}`.
      Not recommended for a first single-plugin submission.
-2. **Fill every placeholder.** `author.name/email`, `homepage`, `repository`
-   in `.cursor-plugin/plugin.json`; copyright holder + year in `LICENSE`;
-   confirm `license` matches; replace or approve `assets/logo.svg`; make
-   sure the README support/contact route is real (publisher provides support).
+2. **Placeholders: mostly decided (2026-10-17).** `author.name`
+   (`Adamdesgns`), `homepage`, and `repository`
+   (https://github.com/Adamdesgns/cli-bridge) are filled in
+   `.cursor-plugin/plugin.json`, and `LICENSE` reads
+   `Copyright (c) 2026 Adamdesgns` (MIT). Still open before submission:
+   `author.email` (publisher must provide it), approving/replacing
+   `assets/logo.svg`, and a real README support/contact route.
 3. **Re-validate in the repo copy:** `python3 scripts/validate_package.py`
-   (must be PASS with no TODO warnings), `python3 -m py_compile server/server.py`,
+   (must PASS; the known author.email OPEN warning is allowed
+   pre-submission), `python3 -m py_compile server/server.py`,
    `python3 smoke_test.py` (PASS, no model calls).
 4. **Test as a local plugin:** copy the repo folder to
    `~/.cursor/plugins/local/cli-bridge` on a test machine, restart the host /
    Developer: Reload Window, confirm the skill + `cli-bridge` MCP server
    load, run `cli_probe`, and — only with the test account owner's explicit
    OK and a cheap prompt — one real call per installed CLI. Also test on
-   each OS you claim to support (see Blocker B5). Remove the local copy
+   each OS you claim to support (see OPEN-3 in section 5). Remove the local copy
    afterwards if a marketplace install would shadow it (marketplace
    installs take precedence over same-name local copies).
 5. **(If the repo uses PRs) get the merge approved.** If `main` is protected
@@ -330,8 +334,9 @@ Cursor's discretion. Budget for rejection or silence.
   cursor.directory and the identity that accepts the Publisher Terms on the
   official form. An agent can prepare every file; it cannot be the legal
   publisher, pass identity/business verification, or click Submit as him.
-- **Make the §5 decisions** (publisher name/email, repo home, license +
-  copyright holder) — placeholders ship unfilled until he does.
+- **Provide the contact email** still open in section 5 (publisher
+  display name, repo home, and MIT license/copyright were decided
+  2026-10-17) and approve any later identity changes.
 - **Approve any PR** that branch protection puts in front of `main` (or
   delegate it to the PR Gate acting on his rules) before submission.
 - **Log in the real CLIs** on a real test machine (his Claude/Codex
@@ -347,72 +352,60 @@ before proceeding.
 
 ---
 
-## 5. Blockers / decisions the publisher must make BEFORE submission
+## 5. Decisions and remaining blockers (updated 2026-10-17)
 
-**Decisions (publisher chooses, then placeholders get filled):**
+**Decided (2026-10-17):**
 
-- **D1 — Publisher identity.** Legal name / display name, contact email, and
-  homepage for `plugin.json` + `LICENSE`. The Terms have the publisher
-  warrant their identity and accept indemnity/arbitration — a person, not
-  this tooling, must own that.
-- **D2 — Repo host + account.** Which GitHub (per the logo-URL resolution,
-  GitHub is the assumed host in the docs) org/user owns the public repo, and
-  the final repo URL for `plugin.json: repository`. Also confirm the plugin
-  `name` `cli-bridge` is acceptable/unique there, or rename now (renaming
-  after listing is painful).
-- **D3 — License.** MIT (placeholder, simplest, complies) vs Apache-2.0
-  (also complies, adds a patent grant). Must be permissive — no copyleft.
-  Also fill the `<year> <copyright holders>` line; an unfilled template
-  license is a sloppy-review risk.
+- **D1 - Publisher display identity: DECIDED.** Display name `Adamdesgns`
+  in `.cursor-plugin/plugin.json` (`author.name`). Contact email: **OPEN**
+  (see below).
+- **D2 - Repo: DECIDED.** `https://github.com/Adamdesgns/cli-bridge`
+  (`homepage` / `repository` in `plugin.json`, plugin name `cli-bridge`).
+- **D3 - License: DECIDED.** MIT; `LICENSE` reads
+  `Copyright (c) 2026 Adamdesgns`.
 
-**Blockers / open questions (need answers or acceptance of risk):**
+**Remaining open items (short, accurate):**
 
-- **B1 — Individual acceptance is unverified.** The publish form is open but
-  the marketplace is curated around trusted partners (§3.6). Submission may
-  be rejected or ignored without reasons. Accept that risk or seek a
-  partner/introduction route first.
-- **B2 — Which catalogue does this actually enter?** It is unverified
-  whether Cursor's publish form also lists plugins for Grok Bot users, or
-  whether Grok Bot has a separate process (§1b). Confirm before promising
-  anyone a "Grok Bot marketplace" listing.
-- **B3 — Host expansion + runtime assumptions.** This package relies on the
-  host expanding `${CURSOR_PLUGIN_ROOT}` (documented for Cursor) and on
-  `uv` + Python 3.11+ existing on the user's machine. Cursor-variable
-  defaults for the `CLI_BRIDGE_*` settings are declared, but dashboard
-  configuration behaviour should be confirmed in the local-plugin test
-  (§4.4) on the real target host(s). If a target host doesn't expand the
-  variable, users need the documented absolute-path fallback edit.
-- **B4 — Model preset availability.** `claude-opus-5-5`, the Claude `fable`
-  alias, and `gpt-6-astra` may not exist for every user's CLI version or
-  account. Listing copy must not promise them; expect reviewer/user
-  confusion and support questions. Consider whether presets stay prominent
-  or become "examples" in a later version — copy is already written to the
-  safer wording.
-- **B5 — Cross-platform proof.** The server was validated only on Linux
-  without either CLI installed (missing-binary paths). Claude/Codex present
-  + logged-in behaviour, and Windows/macOS launches, are untested. At
-  minimum one real-machine test per claimed OS is needed before submission
-  claims are made (§4.4) — with the account owner's explicit OK for the
-  cheap test prompts, since real calls spend quota.
-- **B6 — Review scrutiny of design.** A plugin that shells out to other
-  agents and spends user quota will (rightly) get hard security review:
-  permission ceilings, cwd allowlist, and the spend-approval skill wording
-  are the mitigations. A reviewer may still require changes (e.g. remote-MCP
-  instead of local stdio, or no prompt tools at all). Also note the security
-  page's "Plugins are lightweight… No binaries are shipped" framing — this
-  package ships executable Python launched via `uv`; be ready to justify it.
+- **OPEN-1 - Contact email (only the publisher can clear).**
+  `plugin.json` `author.email` stays blank and no email is invented here.
+  Marketplace submission waits on the publisher providing a real contact
+  email. Merging this package PR does **not** require it; only marketplace
+  submission does.
+- **OPEN-2 - Marketplace submission itself.** Not submitted, and merging
+  this PR is not marketplace submission. Submission (either track in
+  section 4) still needs the publisher's direct word, the email above,
+  and acceptance of the Publisher Terms / identity checks by the
+  publisher personally.
+- **OPEN-3 - Residual review/platform risks (accept or resolve later):**
+  individual acceptance is unverified and the marketplace is curated
+  (rejection/silence possible); whether a Cursor submission also lists
+  the plugin for other host catalogues is unverified; model presets
+  (`claude-opus-5-5`, `fable`, `gpt-6-astra`) depend on each user's CLI
+  version/account; a security reviewer may still require design changes
+  for a plugin that launches other CLIs and spends user quota.
 
 ---
 
-## 6. What was validated locally for this package (2026-10-17, Linux box)
+## 6. What was validated for this package (2026-10-17)
 
-See the build report accompanying this package for the exact command output:
-`validate_package.py`, `py_compile`, and `smoke_test.py` (MCP initialize +
-tools/list against the packaged `mcp.json` launch command with
-`${CURSOR_PLUGIN_ROOT}` expanded to the package folder and cwd = that
-folder), covering `cli_probe` and both missing-binary error paths plus the
-cwd-allowlist and permission-ceiling rejections. **Caveat:** neither
-`claude` nor `codex` is installed on the validation machine, so no real
-model call, login flow, or successful CLI execution has been exercised —
-§4.4/B5 remain open. No submission, registration, or paid model call was
-made while building this package.
+Two different kinds of evidence exist; do not conflate them:
+
+- **Box / CI validation (no real CLI, no model call).**
+  `validate_package.py`, `py_compile`, and `smoke_test.py` (MCP initialize +
+  tools/list against the packaged `mcp.json` launch command with
+  `${CURSOR_PLUGIN_ROOT}` expanded to the package folder and cwd = that
+  folder), covering `cli_probe`, both missing-binary error paths, the
+  cwd-allowlist rejection, and the permission-ceiling rejections. Neither
+  `claude` nor `codex` is installed on the Linux validation box, so this
+  proves only the missing-binary / guardrail paths - no real model call,
+  login flow, or successful CLI execution is exercised there. CI
+  (`.github/workflows/validate.yml`) covers exactly this box validation
+  on every pull request and push.
+- **Live tests on the publisher's Windows machine (2026-10-17).**
+  Reported as 4/4 PONG (one cheap call each) in PR #1's body; evidence is
+  the runner output reported in that PR body. Those live calls are not
+  re-run by CI (CI runners have neither CLI installed or logged in), and
+  no paid model call is made by CI.
+
+No marketplace submission, registration, or paid model call was made in
+CI or while preparing these fixes.

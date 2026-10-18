@@ -6,7 +6,7 @@
       "args": [
         "run",
         "--with",
-        "mcp<2",
+        "mcp==1.30.0",
         "python3",
         "${CURSOR_PLUGIN_ROOT}/server/server.py"
       ],
@@ -17,7 +17,8 @@
         "CLI_BRIDGE_CODEX_DEFAULT_MODEL": "${CLI_BRIDGE_CODEX_DEFAULT_MODEL}",
         "CLI_BRIDGE_WORKSPACE_ROOT": "${CLI_BRIDGE_WORKSPACE_ROOT}",
         "CLI_BRIDGE_TIMEOUT_SECONDS": "${CLI_BRIDGE_TIMEOUT_SECONDS}",
-        "CLI_BRIDGE_OUTPUT_CAP_CHARS": "${CLI_BRIDGE_OUTPUT_CAP_CHARS}"
+        "CLI_BRIDGE_OUTPUT_CAP_CHARS": "${CLI_BRIDGE_OUTPUT_CAP_CHARS}",
+        "CLI_BRIDGE_ALLOWED_ROOTS": "${CLI_BRIDGE_ALLOWED_ROOTS}"
       }
     }
   }

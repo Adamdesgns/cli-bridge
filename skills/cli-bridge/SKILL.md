@@ -47,8 +47,9 @@ handle the user's API keys or credentials.
 4. **Working folder.** Pass `cwd` only inside the user's workspace. If you
    get an "allowed workspace root" error, report it and ask the user to set
    `CLI_BRIDGE_WORKSPACE_ROOT` (plugin Configure / variables) to their
-   workspace folder. Do not suggest disabling the allowlist unless the user
-   explicitly asks about it.
+   workspace folder, or extend it via the declared
+   `CLI_BRIDGE_ALLOWED_ROOTS` variable. The allowlist cannot be disabled --
+   do not suggest or look for a way to disable it.
 5. **Prompts are work orders.** Send a self-contained prompt: goal, relevant
    file paths, constraints, and what to return. The CLI cannot see this
    conversation. Prefer read-only / review tasks unless the user approved edits.

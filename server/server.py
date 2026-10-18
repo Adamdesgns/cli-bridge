@@ -22,11 +22,12 @@ Safety (marketplace build):
   - permission ceilings: Claude never bypassPermissions;
     Codex never danger-full-access (read-only / workspace-write only)
   - cwd allowlist: cwd must resolve inside an allowed root. Roots come from
-    $CLI_BRIDGE_WORKSPACE_ROOT or $CLI_BRIDGE_ALLOWED_ROOTS (os.pathsep
-    separated); if neither is set, the folder this server was launched
-    from (its startup cwd) is the single allowed root. Relative cwd is
-    resolved against that root. Set CLI_BRIDGE_ALLOW_ANY_CWD=1 to disable
-    the allowlist (unsafe, not recommended; documented in README).
+    $CLI_BRIDGE_WORKSPACE_ROOT plus optional $CLI_BRIDGE_ALLOWED_ROOTS
+    (os.pathsep separated, declared in plugin.json variables / mcp.json env);
+    if neither is set, the folder this server was launched from (its
+    startup cwd) is the single allowed root. Relative cwd is resolved
+    against that root. The allowlist cannot be disabled; it can only be
+    extended via those declared variables.
   - timeout clamped 5-900s (default $CLI_BRIDGE_TIMEOUT_SECONDS or 300)
   - stdout/stderr each capped ($CLI_BRIDGE_OUTPUT_CAP_CHARS or 20000 chars)
   - environment is inherited so CLIs can use their own login, but env
@@ -36,8 +37,10 @@ Safety (marketplace build):
     handle their own auth on the machine where they run.
 
 Run (as wired in ../mcp.json, host expands ${CURSOR_PLUGIN_ROOT}):
-  uv run --with "mcp<2" python3 ${CURSOR_PLUGIN_ROOT}/server/server.py
-Pinned to mcp<2 because mcp 2.x renamed the FastMCP API used here.
+  uv run --with "mcp==1.30.0" python3 ${CURSOR_PLUGIN_ROOT}/server/server.py
+Exactly pinned to mcp==1.30.0 (the 1.x line whose FastMCP API this server
+uses; mcp 2.x renamed that API). First launch fetches that exact version
+from PyPI via uv.
 """
 import os
 import re
@@ -124,13 +127,12 @@ def _resolve_cwd(cwd: Optional[str]) -> Path:
         p = p.resolve()
     else:
         p = roots[0]
-    if _env("CLI_BRIDGE_ALLOW_ANY_CWD") != "1":
-        if not any(p == r or r in p.parents for r in roots):
-            raise ValueError(
-                f"cwd must be inside an allowed workspace root { [str(r) for r in roots] }, got: {p}. "
-                "Set CLI_BRIDGE_WORKSPACE_ROOT to your workspace folder if the host launched "
-                "this server from elsewhere."
-            )
+    if not any(p == r or r in p.parents for r in roots):
+        raise ValueError(
+            f"cwd must be inside an allowed workspace root { [str(r) for r in roots] }, got: {p}. "
+            "Set CLI_BRIDGE_WORKSPACE_ROOT to your workspace folder if the host launched "
+            "this server from elsewhere."
+        )
     if not p.is_dir():
         raise ValueError(f"cwd does not exist or is not a directory: {p}")
     return p
