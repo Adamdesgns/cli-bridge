@@ -1,0 +1,85 @@
+{
+  "name": "cli-bridge",
+  "displayName": "CLI Bridge (Claude Code + Codex)",
+  "version": "0.1.0",
+  "description": "Let your agent call the Claude Code and OpenAI Codex CLIs already installed and logged in on your own machine. Presets: Claude Opus 5.5 / Fable, Codex Astra / default. No API keys bundled; each CLI uses its own local login.",
+  "author": {
+    "name": "Adamdesgns",
+    "email": ""
+  },
+  "homepage": "https://github.com/Adamdesgns/cli-bridge",
+  "repository": "https://github.com/Adamdesgns/cli-bridge",
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "claude-code",
+    "codex",
+    "cli",
+    "mcp",
+    "coding-agent",
+    "claude",
+    "openai"
+  ],
+  "category": "developer-tools",
+  "tags": [
+    "mcp",
+    "cli",
+    "claude-code",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "CLI_BRIDGE_CLAUDE_BIN": {
+        "type": "string",
+        "title": "Claude CLI binary",
+        "description": "Binary name or absolute path for Claude Code CLI. Default: claude",
+        "default": "claude"
+      },
+      "CLI_BRIDGE_CODEX_BIN": {
+        "type": "string",
+        "title": "Codex CLI binary",
+        "description": "Binary name or absolute path for OpenAI Codex CLI. Default: codex",
+        "default": "codex"
+      },
+      "CLI_BRIDGE_CLAUDE_DEFAULT_MODEL": {
+        "type": "string",
+        "title": "Default Claude model",
+        "description": "Used when claude_prompt model=default. Default: claude-opus-5-5",
+        "default": "claude-opus-5-5"
+      },
+      "CLI_BRIDGE_CODEX_DEFAULT_MODEL": {
+        "type": "string",
+        "title": "Default Codex model (optional)",
+        "description": "Leave empty to use Codex CLI's own default when codex_prompt model=default.",
+        "default": ""
+      },
+      "CLI_BRIDGE_WORKSPACE_ROOT": {
+        "type": "string",
+        "title": "Workspace root (allowed cwd)",
+        "description": "Absolute path to the workspace folder the CLIs may run in. Empty = the folder the MCP host launched the server from.",
+        "default": ""
+      },
+      "CLI_BRIDGE_ALLOWED_ROOTS": {
+        "type": "string",
+        "title": "Additional allowed roots (optional)",
+        "description": "Optional os.pathsep-separated list of extra absolute folders the CLIs may run in, in addition to CLI_BRIDGE_WORKSPACE_ROOT. The cwd allowlist cannot be disabled; it can only be extended via CLI_BRIDGE_WORKSPACE_ROOT and this variable.",
+        "default": ""
+      },
+      "CLI_BRIDGE_TIMEOUT_SECONDS": {
+        "type": "string",
+        "title": "Default timeout seconds",
+        "description": "Default per-call timeout, clamped 5-900. Default: 300",
+        "default": "300"
+      },
+      "CLI_BRIDGE_OUTPUT_CAP_CHARS": {
+        "type": "string",
+        "title": "Output cap characters",
+        "description": "Max stdout/stderr characters returned per call. Default: 20000",
+        "default": "20000"
+      }
+    }
+  }
+}

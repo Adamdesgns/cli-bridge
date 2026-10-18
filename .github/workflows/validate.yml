@@ -1,0 +1,21 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: astral-sh/setup-uv@v5
+      - name: Validate package
+        run: python scripts/validate_package.py
+      - name: Compile
+        run: python -m py_compile server/server.py scripts/validate_package.py smoke_test.py
+      - name: Smoke test (no model calls)
+        run: python smoke_test.py
