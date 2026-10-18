@@ -164,7 +164,7 @@ Repo-root layout (this `marketplace/` folder **is** the plugin root and
 should become the root of the submission repository — see §4 step 1):
 
 ```
-.cursor-plugin/plugin.json   manifest: name cli-bridge, v0.1.0, publisher Adamdesgns / repo decided 2026-10-17; contact email still OPEN (see section 5)
+.cursor-plugin/plugin.json   manifest: name cli-bridge, v0.1.0, publisher Adamdesgns / repo decided 2026-10-17; contact email `Hello@adamdesgns.com` DECIDED 2026-10-18 (see section 5)
 mcp.json                     stdio MCP launch: uv run --with "mcp==1.30.0" python3 ${CURSOR_PLUGIN_ROOT}/server/server.py
 server/server.py             cli_probe + claude_prompt + codex_prompt (generic, no machine-specific paths)
 skills/cli-bridge/SKILL.md   when/how to use the tools, probe-first, spend-approval, permission ceilings
@@ -264,12 +264,12 @@ Cursor's discretion. Budget for rejection or silence.
    (`Adamdesgns`), `homepage`, and `repository`
    (https://github.com/Adamdesgns/cli-bridge) are filled in
    `.cursor-plugin/plugin.json`, and `LICENSE` reads
-   `Copyright (c) 2026 Adamdesgns` (MIT). Still open before submission:
-   `author.email` (publisher must provide it), approving/replacing
-   `assets/logo.svg`, and a real README support/contact route.
+   `Copyright (c) 2026 Adamdesgns` (MIT). `author.email` is
+   `Hello@adamdesgns.com` (DECIDED 2026-10-18). Still open before submission:
+   approving/replacing `assets/logo.svg`, and a real README support/contact route.
 3. **Re-validate in the repo copy:** `python3 scripts/validate_package.py`
-   (must PASS; the known author.email OPEN warning is allowed
-   pre-submission), `python3 -m py_compile server/server.py`,
+   (must PASS, with no author.email warning now that it is set),
+   `python3 -m py_compile server/server.py`,
    `python3 smoke_test.py` (PASS, no model calls).
 4. **Test as a local plugin:** copy the repo folder to
    `~/.cursor/plugins/local/cli-bridge` on a test machine, restart the host /
@@ -334,9 +334,9 @@ Cursor's discretion. Budget for rejection or silence.
   cursor.directory and the identity that accepts the Publisher Terms on the
   official form. An agent can prepare every file; it cannot be the legal
   publisher, pass identity/business verification, or click Submit as him.
-- **Provide the contact email** still open in section 5 (publisher
-  display name, repo home, and MIT license/copyright were decided
-  2026-10-17) and approve any later identity changes.
+- **Contact email: DECIDED 2026-10-18.** `Hello@adamdesgns.com` is set in
+  `plugin.json` `author.email` (publisher display name, repo home, and MIT
+  license/copyright were decided 2026-10-17); approve any later identity changes.
 - **Approve any PR** that branch protection puts in front of `main` (or
   delegate it to the PR Gate acting on his rules) before submission.
 - **Log in the real CLIs** on a real test machine (his Claude/Codex
@@ -352,13 +352,13 @@ before proceeding.
 
 ---
 
-## 5. Decisions and remaining blockers (updated 2026-10-17)
+## 5. Decisions and remaining blockers (updated 2026-10-18)
 
 **Decided (2026-10-17):**
 
 - **D1 - Publisher display identity: DECIDED.** Display name `Adamdesgns`
-  in `.cursor-plugin/plugin.json` (`author.name`). Contact email: **OPEN**
-  (see below).
+  in `.cursor-plugin/plugin.json` (`author.name`). Contact email:
+  `Hello@adamdesgns.com` in `author.email` - **DECIDED 2026-10-18**.
 - **D2 - Repo: DECIDED.** `https://github.com/Adamdesgns/cli-bridge`
   (`homepage` / `repository` in `plugin.json`, plugin name `cli-bridge`).
 - **D3 - License: DECIDED.** MIT; `LICENSE` reads
@@ -366,16 +366,10 @@ before proceeding.
 
 **Remaining open items (short, accurate):**
 
-- **OPEN-1 - Contact email (only the publisher can clear).**
-  `plugin.json` `author.email` stays blank and no email is invented here.
-  Marketplace submission waits on the publisher providing a real contact
-  email. Merging this package PR does **not** require it; only marketplace
-  submission does.
 - **OPEN-2 - Marketplace submission itself.** Not submitted, and merging
   this PR is not marketplace submission. Submission (either track in
-  section 4) still needs the publisher's direct word, the email above,
-  and acceptance of the Publisher Terms / identity checks by the
-  publisher personally.
+  section 4) still needs the publisher's direct word and acceptance of
+  the Publisher Terms / identity checks by the publisher personally.
 - **OPEN-3 - Residual review/platform risks (accept or resolve later):**
   individual acceptance is unverified and the marketplace is curated
   (rejection/silence possible); whether a Cursor submission also lists

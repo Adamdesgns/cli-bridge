@@ -5,7 +5,7 @@
   "description": "Let your agent call the Claude Code and OpenAI Codex CLIs already installed and logged in on your own machine. Presets: Claude Opus 5.5 / Fable, Codex Astra / default. No API keys bundled; each CLI uses its own local login.",
   "author": {
     "name": "Adamdesgns",
-    "email": ""
+    "email": "Hello@adamdesgns.com"
   },
   "homepage": "https://github.com/Adamdesgns/cli-bridge",
   "repository": "https://github.com/Adamdesgns/cli-bridge",
